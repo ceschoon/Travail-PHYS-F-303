@@ -57,13 +57,16 @@ def moindres_carres(x,y,A_test,X0_test,C_test):
     return [A,X0,C]
 
 @jit
-def moindres_carres_avec_erreur(filename):
+def moindres_carres_avec_erreur(filename,A_test,X0_test,C_test):
     """ Finds the alpha that maximises a parabolic fit of the top of the heat capacity curve stored in the 
         file at "filename", as well as the error associated
    
     Parameters:
     ----------
-    alpha : name of the file where the data is stored
+    filename : name of the file where the data is stored
+    A_test  : test coefficent in y = A*(x-X0)**2+C
+    X0_test : test coefficent in y = A*(x-X0)**2+C
+    C_test  : test coefficent in y = A*(x-X0)**2+C
     
     Returns:
     -------
@@ -90,10 +93,6 @@ def moindres_carres_avec_erreur(filename):
     
     indices = np.where((alphas>0.41)&(alphas<0.46))
 
-    A_test  = np.linspace(-15.0,-5.0,11)
-    X0_test = np.linspace(0.430,0.440,201) # paramètre le plus pertinent -> plus de points
-    C_test  = np.linspace(0.0160,0.0170,11)
-
     [A_fit,X0_fit,C_fit] = moindres_carres(alphas[indices],Cvs[indices],A_test,X0_test,C_test)
     print("Best fitting parameters: {:.4f} {:.4f} {:.4f}".format(A_fit,X0_fit,C_fit))
 
@@ -114,12 +113,12 @@ def moindres_carres_avec_erreur(filename):
     
         #print("loop {:d} of {:d}".format(i,repet))
     
-        Cvs_bruit = Cvs + np.random.uniform(-1,1,len(VarEs))*3e-4 # amplitude plausible
+        Cvs_bruit = Cvs + np.random.uniform(-1,1,len(VarEs))*3e-4 # amplitude plausible -> vérifiée systématiquement sur les graphiques !
 
         indices = np.where((alphas>0.41)&(alphas<0.46))
 
         A_test  = np.array([A_fit_original])
-        X0_test = np.linspace(0.430,0.440,51)  # variation utile que pour le paramètre le plus pertinent (domine)
+        #X0_test = np.linspace(0.430,0.440,51)  # variation utile que pour le paramètre le plus pertinent (domine)
         C_test  = np.array([C_fit_original])
 
         [A_fit,X0_fit,C_fit] = moindres_carres(alphas[indices],Cvs_bruit[indices],A_test,X0_test,C_test)
