@@ -84,8 +84,8 @@ def moindres_carres_avec_erreur(filename,A_test,X0_test,C_test):
     indices = np.argsort(alphas)
     alphas = alphas[indices]
     Ms = Ms[indices]
-    Es = Es[indices]
-    VarEs = VarEs[indices]
+    Es = Es[indices]/2
+    VarEs = VarEs[indices]/4
     Cvs = VarEs
     
     # Ensuite, on applique la méthode des moindres carrés implémentée plus haut pour fitter le sommet de la courbe
@@ -113,7 +113,7 @@ def moindres_carres_avec_erreur(filename,A_test,X0_test,C_test):
     
         #print("loop {:d} of {:d}".format(i,repet))
     
-        Cvs_bruit = Cvs + np.random.uniform(-1,1,len(VarEs))*3e-4 # amplitude plausible -> vérifiée systématiquement sur les graphiques !
+        Cvs_bruit = Cvs + np.random.uniform(-1,1,len(VarEs))*1e-4 # amplitude plausible -> vérifiée systématiquement sur les graphiques !
 
         indices = np.where((alphas>0.41)&(alphas<0.46))
 
